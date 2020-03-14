@@ -1,0 +1,116 @@
+    <!-- ===== Main-Wrapper ===== -->
+    <div id="wrapper">
+      <div class="preloader">
+          <div class="cssload-speeding-wheel"></div>
+      </div>
+      <!-- ===== Top-Navigation ===== -->
+      <nav class="navbar navbar-default navbar-static-top m-b-0">
+          <div class="navbar-header">
+              <a class="navbar-toggle font-20 hidden-sm hidden-md hidden-lg " href="javascript:void(0)" data-toggle="collapse" data-target=".navbar-collapse">
+                  <i class="fa fa-bars"></i>
+              </a>
+              <div class="top-left-part">
+                  <a class="logo" href="index-2.html">
+                      <b>
+                          <img src="../assets/plugins/images/logo.png" alt="home" />
+                      </b>
+                      <span>
+                          <img src="../assets/plugins/images/logo-text.png" alt="homepage" class="dark-logo" />
+                      </span>
+                  </a>
+              </div>
+              <ul class="nav navbar-top-links navbar-left hidden-xs">
+                  <li>
+                      <a href="javascript:void(0)" class="sidebartoggler font-20 waves-effect waves-light"><i class="icon-arrow-left-circle"></i></a>
+                  </li>
+              </ul>
+              <ul class="nav navbar-top-links navbar-right pull-right">
+                  <li class="right-side-toggle">
+                      <!-- <a class="right-side-toggler waves-effect waves-light b-r-0 font-20" href="javascript:void(0)"> -->
+                      <a href="#" class="font-20">
+                          <i class="fa fa-power-off"><span style="font-family: Arial, Helvetica, sans-serif; font-weight: bold;"> Logout</span></i>
+                      </a>
+                  </li>
+              </ul>
+          </div>
+      </nav>
+      <!-- ===== Top-Navigation-End ===== -->
+      <!-- ===== Left-Sidebar ===== -->
+      <aside class="sidebar">
+          <div class="scroll-sidebar">
+              <nav class="sidebar-nav">
+                  <ul id="side-menu">
+                    <li>
+                      <a class="active" href="/" aria-expanded="false"><i class="icon-home fa-fw"></i> <span class="hide-menu"> Home </span></a>
+                    </li>
+                    <li>
+                      <a class="waves-effect" href="javascript:void(0);" aria-expanded="false"><i class="icon-docs fa-fw"></i> <span class="hide-menu"> Data Master </span></a>
+                        <ul aria-expanded="false" class="collapse">
+                          <li> <a [routerLink]="['/distributor']">Distributor</a> </li>
+                          <li> <a href="#">Instansi</a> </li>
+                          <li> <a href="#">Dokter</a> </li>
+                          <li> <a href="#">Karyawan</a> </li>
+                        </ul>
+                    </li>
+                    <li>
+                      <a href="#" aria-expanded="false"><i class="icon-people fa-fw"></i> <span class="hide-menu"> Customer </span></a>
+                    </li>
+                    <li>
+                      <a class="waves-effect" href="javascript:void(0);" aria-expanded="false"><i class="icon-briefcase fa-fw"></i> <span class="hide-menu"> Data Produk </span></a>
+                        <ul aria-expanded="false" class="collapse">
+                          <li> <a href="#">Kategori Produk</a> </li>
+                          <li> 
+                            <a class="waves-effect" href="javascript:void(0);" aria-expanded="false">Stok Gudang</a> 
+                            <ul aria-expanded="false" class="collapse">
+                              <li> <a href="#">Frame</a> </li>
+                              <li> <a href="#">Lensa</a> </li>
+                              <li> <a href="#">Softlens</a> </li>
+                            </ul>
+                          </li>
+                          <li> <a href="#">Stok Cabang</a> </li>
+                        </ul>
+                    </li>
+                    <li>
+                      <a class="waves-effect" href="javascript:void(0);" aria-expanded="false"><i class="icon-basket fa-fw"></i> <span class="hide-menu"> Transaksi </span></a>
+                        <ul aria-expanded="false" class="collapse">
+                          <li> <a href="#">Pemesanan</a> </li>
+                          <li> <a href="#">Retail</a> </li>
+                          <li> <a href="#">Grosir</a> </li>
+                        </ul>
+                    </li>
+                    <li>
+                      <a class="waves-effect" href="javascript:void(0);" aria-expanded="false"><i class="icon-list fa-fw"></i> <span class="hide-menu"> Laporan </span></a>
+                        <ul aria-expanded="false" class="collapse">
+                          <li> <a href="#">Pemesanan</a> </li>
+                          <li> <a href="#">Retail</a> </li>
+                          <li> <a href="#">Grosir</a> </li>
+                          <li> <a href="#">Gaji Karyawan</a> </li>
+                          <li> <a href="#">Laba Rugi</a> </li>
+                        </ul>
+                    </li>
+                    <li>
+                      <a class="waves-effect" href="javascript:void(0);" aria-expanded="false"><i class="icon-settings fa-fw"></i> <span class="hide-menu"> Pengaturan </span></a>
+                        <ul aria-expanded="false" class="collapse">
+                          <li> <a href="#">Data Cabang</a> </li>
+                          <li> <a href="#">Pengguna</a> </li>
+                          <li> <a href="#">Backup / Restore</a> </li>
+                        </ul>
+                    </li>
+                    <li>
+                      <a href="#" aria-expanded="false"><i class="fa fa-power-off fa-fw"></i> <span class="hide-menu"> Logout </span></a>
+                    </li>
+                  </ul>
+              </nav>
+          </div>
+      </aside>
+      <!-- ===== Left-Sidebar-End ===== -->
+      <!-- ===== Page-Content ===== -->
+      <div class="page-wrapper">
+          <router-outlet></router-outlet>
+          <footer class="footer t-a-c">
+              © 2020 Optik Kustin
+          </footer>
+      </div>
+      <!-- ===== Page-Content-End ===== -->
+  </div>
+  <!-- ===== Main-Wrapper-End ===== -->

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>OptikFrontend</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <!-- ===== Bootstrap CSS ===== -->
+  <link href="assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- ===== Plugin CSS ===== -->
+  <link href="assets/plugins/components/chartist-js/dist/chartist.min.css" rel="stylesheet">
+  <link href="assets/plugins/components/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.css" rel="stylesheet">
+  <link href='assets/plugins/components/fullcalendar/fullcalendar.css' rel='stylesheet'>
+  <!-- ===== Animation CSS ===== -->
+  <link href="assets/css/animate.css" rel="stylesheet">
+  <!-- ===== Custom CSS ===== -->
+  <link href="assets/css/style.css" rel="stylesheet">
+  <!-- ===== Color CSS ===== -->
+  <link href="assets/css/colors/green-dark.css" id="theme" rel="stylesheet">
+    <!-- ==============================
+      Required JS Files
+  =============================== -->
+  <!-- ===== jQuery ===== -->
+  <script src="assets/plugins/components/jquery/dist/jquery.min.js"></script>
+  <!-- ===== Bootstrap JavaScript ===== -->
+  <script src="assets/bootstrap/dist/js/bootstrap.min.js"></script>
+  <!-- ===== Slimscroll JavaScript ===== -->
+  <script src="assets/js/jquery.slimscroll.js"></script>
+  <!-- ===== Wave Effects JavaScript ===== -->
+  <script src="assets/js/waves.js"></script>
+  <!-- ===== Menu Plugin JavaScript ===== -->
+  <script src="assets/js/sidebarmenu.js"></script>
+  <!-- ===== Custom JavaScript ===== -->
+  <script src="assets/js/custom.js"></script>
+  <script src="assets/plugins/components/datatables/jquery.dataTables.min.js"></script>
+  <script>
+    $(function() {
+        $('#myTable').DataTable();
+
+        var table = $('#example').DataTable({
+            "columnDefs": [{
+                "visible": false,
+                "targets": 2
+            }],
+            "order": [
+                [2, 'asc']
+            ],
+            "displayLength": 25,
+            "drawCallback": function(settings) {
+                var api = this.api();
+                var rows = api.rows({
+                    page: 'current'
+                }).nodes();
+                var last = null;
+                api.column(2, {
+                    page: 'current'
+                }).data().each(function(group, i) {
+                    if (last !== group) {
+                        $(rows).eq(i).before('<tr class="group"><td colspan="5">' + group + '</td></tr>');
+                        last = group;
+                    }
+                });
+            }
+        });
+        // Order by the grouping
+        $('#example tbody').on('click', 'tr.group', function() {
+            var currentOrder = table.order()[0];
+            if (currentOrder[0] === 2 && currentOrder[1] === 'asc') {
+                table.order([2, 'desc']).draw();
+            } else {
+                table.order([2, 'asc']).draw();
+            }
+        });
+
+    });
+  </script>
+  <!-- ===== Plugin JS ===== -->
+  <script src="assets/plugins/components/chartist-js/dist/chartist.min.js"></script>
+  <script src="assets/plugins/components/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.min.js"></script>
+  <script src='assets/plugins/components/moment/moment.js'></script>
+  <script src='assets/plugins/components/fullcalendar/fullcalendar.js'></script>
+  <script src="assets/js/db2.js"></script>
+  <!-- ===== Style Switcher JS ===== -->
+  <script src="assets/plugins/components/styleswitcher/jQuery.style.switcher.js"></script>
+</head>
+<body class="mini-sidebar">
+  <app-root></app-root>
+</body>
+</html>
