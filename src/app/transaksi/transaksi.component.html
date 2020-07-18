@@ -1,0 +1,59 @@
+<ngx-spinner></ngx-spinner>
+<jaspero-alerts [defaultSettings]="options"></jaspero-alerts>
+<div class="container-fluid">
+    <!-- /row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="white-box">
+                <h3 align="center" style="text-transform: uppercase;"><b>DATA TRANSAKSI {{ jenis }}</b></h3>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <a class="btn btn-success" [routerLink]="['/transaksi/add/',jenis]"><i class="fa fa-plus"></i> Tambah Transaksi</a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Cari Transaksi.." (keyup)="cari()" [(ngModel)]="txtcari" name="txtcari">
+                        </div>
+                    </div>
+                </div>
+                <table class="tablesaw table-bordered table-hover table" data-tablesaw-mode="stack" id="mytable" *ngIf="items[0].id != null">
+                    <thead>
+                        <tr>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-sortable-default-col data-tablesaw-priority="persist">Kode</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">Tanggal</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="4">Total Diskon</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="5">Total Belanja</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="6">Pembayaran</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="8">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of items">
+                            <td><a [routerLink]="['/transaksi/view/',item.id]">{{ item.kodetransaksi }}</a></td>
+                            <td>{{ item.tanggaltransaksi | date: 'dd-M-yyyy'}}</td>
+                            <td>{{ item.totaldiskon | currency:"IDR":"Rp. "}}</td>
+                            <td>{{ item.totalbelanja | currency:"IDR":"Rp. "}}</td>
+                            <td *ngIf="item.status =='belum'">
+                                BELUM LUNAS
+                            </td>
+                            <td *ngIf="item.status =='lunas'">
+                                LUNAS
+                            </td>
+                            <td class="text-nowrap">
+                                <!-- <a data-toggle="tooltip" data-original-title="Edit" (click)="edit(item)"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a> -->
+                                <a *ngIf="level == 'admin'" data-toggle="tooltip" data-original-title="Hapus" (click)="hapus(item)"> <i class="fa fa-close text-danger m-r-10"></i> </a>
+                                <a data-toggle="tooltip" data-original-title="Cetak" (click)="cetak(item)"> <i class="fa fa-print text-success m-r-10"></i> </a>
+                                <a *ngIf="item.status == 'belum' && item.jenistransaksi =='pesan'" data-toggle="tooltip" data-original-title="Lunas" (click)="lunas(item)"> <i class="fa fa-check text-primary"></i> Lunasi</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div *ngIf="items[0].id == null"><b>[ TIDAK ADA DATA TRANSAKSI! ]</b></div>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.container-fluid -->

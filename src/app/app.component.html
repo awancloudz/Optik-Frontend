@@ -1,8 +1,10 @@
     <!-- ===== Main-Wrapper ===== -->
-    <div id="wrapper">
-      <div class="preloader">
+    <ngx-spinner></ngx-spinner>
+    <jaspero-alerts [defaultSettings]="options"></jaspero-alerts>
+    <div id="wrapper" *ngIf="loginstatus != null">
+      <!-- <div class="preloader">
           <div class="cssload-speeding-wheel"></div>
-      </div>
+      </div> -->
       <!-- ===== Top-Navigation ===== -->
       <nav class="navbar navbar-default navbar-static-top m-b-0">
           <div class="navbar-header">
@@ -10,7 +12,7 @@
                   <i class="fa fa-bars"></i>
               </a>
               <div class="top-left-part">
-                  <a class="logo" href="index-2.html">
+                  <a class="logo" href="/">
                       <b>
                           <img src="../assets/plugins/images/logo.png" alt="home" />
                       </b>
@@ -27,7 +29,7 @@
               <ul class="nav navbar-top-links navbar-right pull-right">
                   <li class="right-side-toggle">
                       <!-- <a class="right-side-toggler waves-effect waves-light b-r-0 font-20" href="javascript:void(0)"> -->
-                      <a href="#" class="font-20">
+                      <a (click)="logout()" class="font-20">
                           <i class="fa fa-power-off"><span style="font-family: Arial, Helvetica, sans-serif; font-weight: bold;"> Logout</span></i>
                       </a>
                   </li>
@@ -39,65 +41,81 @@
       <aside class="sidebar">
           <div class="scroll-sidebar">
               <nav class="sidebar-nav">
-                  <ul id="side-menu">
+                  <ul id="side-menu" *ngIf="level == 'admin'">
                     <li>
                       <a class="active" href="/" aria-expanded="false"><i class="icon-home fa-fw"></i> <span class="hide-menu"> Home </span></a>
                     </li>
                     <li>
                       <a class="waves-effect" href="javascript:void(0);" aria-expanded="false"><i class="icon-docs fa-fw"></i> <span class="hide-menu"> Data Master </span></a>
                         <ul aria-expanded="false" class="collapse">
+                          <li> <a [routerLink]="['/karyawan']">Karyawan</a> </li>
                           <li> <a [routerLink]="['/distributor']">Distributor</a> </li>
-                          <li> <a href="#">Instansi</a> </li>
-                          <li> <a href="#">Dokter</a> </li>
-                          <li> <a href="#">Karyawan</a> </li>
+                          <li> <a [routerLink]="['/customer']">Customer</a> </li>
                         </ul>
-                    </li>
-                    <li>
-                      <a href="#" aria-expanded="false"><i class="icon-people fa-fw"></i> <span class="hide-menu"> Customer </span></a>
                     </li>
                     <li>
                       <a class="waves-effect" href="javascript:void(0);" aria-expanded="false"><i class="icon-briefcase fa-fw"></i> <span class="hide-menu"> Data Produk </span></a>
                         <ul aria-expanded="false" class="collapse">
-                          <li> <a href="#">Kategori Produk</a> </li>
+                          <li> <a [routerLink]="['/kategoriproduk']">Kategori Produk</a> </li>
+                          <li> <a [routerLink]="['/merk']">Merk/Brand</a> </li>
                           <li> 
-                            <a class="waves-effect" href="javascript:void(0);" aria-expanded="false">Stok Gudang</a> 
+                            <a class="waves-effect" href="javascript:void(0);" aria-expanded="false">Stok Pusat</a> 
                             <ul aria-expanded="false" class="collapse">
-                              <li> <a href="#">Frame</a> </li>
-                              <li> <a href="#">Lensa</a> </li>
-                              <li> <a href="#">Softlens</a> </li>
+                              <li *ngFor="let cat of kategori"> <a [routerLink]="['/produk/kategori/',cat.id]">{{ cat.nama }}</a></li>
                             </ul>
                           </li>
-                          <li> <a href="#">Stok Cabang</a> </li>
                         </ul>
                     </li>
                     <li>
                       <a class="waves-effect" href="javascript:void(0);" aria-expanded="false"><i class="icon-basket fa-fw"></i> <span class="hide-menu"> Transaksi </span></a>
                         <ul aria-expanded="false" class="collapse">
-                          <li> <a href="#">Pemesanan</a> </li>
-                          <li> <a href="#">Retail</a> </li>
-                          <li> <a href="#">Grosir</a> </li>
+                          <li> <a [routerLink]="['/transaksi/pembelian']">Pembelian</a> </li>
+                          <li> <a [routerLink]="['/transaksi/kirimcabang']">Update Stok Cabang</a> </li>
+                          <li> <a [routerLink]="['/transaksi/pesan']">Pemesanan</a> </li>
+                          <li> <a [routerLink]="['/transaksi/retail']">Retail</a> </li>
+                          <li> <a [routerLink]="['/transaksi/grosir']">Grosir</a> </li>
                         </ul>
                     </li>
+                    <li> <a [routerLink]="['/cabang']" aria-expanded="false"><i class="icon-location-pin fa-fw"></i> <span class="hide-menu"> Data Cabang </span></a> </li>
                     <li>
                       <a class="waves-effect" href="javascript:void(0);" aria-expanded="false"><i class="icon-list fa-fw"></i> <span class="hide-menu"> Laporan </span></a>
                         <ul aria-expanded="false" class="collapse">
+                          <li> <a href="#">Pembelian</a> </li>
+                          <li> <a href="#">Kirim Cabang</a> </li>
                           <li> <a href="#">Pemesanan</a> </li>
                           <li> <a href="#">Retail</a> </li>
                           <li> <a href="#">Grosir</a> </li>
                           <li> <a href="#">Gaji Karyawan</a> </li>
+                          <li> <a href="#">Produk Terjual</a> </li>
                           <li> <a href="#">Laba Rugi</a> </li>
                         </ul>
                     </li>
                     <li>
                       <a class="waves-effect" href="javascript:void(0);" aria-expanded="false"><i class="icon-settings fa-fw"></i> <span class="hide-menu"> Pengaturan </span></a>
                         <ul aria-expanded="false" class="collapse">
-                          <li> <a href="#">Data Cabang</a> </li>
-                          <li> <a href="#">Pengguna</a> </li>
+                          <li> <a [routerLink]="['/profile']">Profile Toko</a> </li>
+                          <li> <a [routerLink]="['/pengguna']">Pengguna</a> </li>
                           <li> <a href="#">Backup / Restore</a> </li>
                         </ul>
                     </li>
                     <li>
-                      <a href="#" aria-expanded="false"><i class="fa fa-power-off fa-fw"></i> <span class="hide-menu"> Logout </span></a>
+                      <a (click)="logout()" aria-expanded="false"><i class="fa fa-power-off fa-fw"></i> <span class="hide-menu"> Logout </span></a>
+                    </li>
+                  </ul>
+                  <ul id="side-menu" *ngIf="level == 'sales'">
+                    <li>
+                      <a [routerLink]="['/cabang/stok/',id_profile]" class="waves-effect" href="javascript:void(0);" aria-expanded="false"><i class="icon-briefcase fa-fw"></i> <span class="hide-menu"> Data Produk </span></a>
+                    </li>
+                    <li>
+                      <a class="waves-effect" href="javascript:void(0);" aria-expanded="false"><i class="icon-basket fa-fw"></i> <span class="hide-menu"> Transaksi </span></a>
+                        <ul aria-expanded="false" class="collapse">
+                          <li> <a [routerLink]="['/transaksi/pesan']">Pemesanan</a> </li>
+                          <li> <a [routerLink]="['/transaksi/retail']">Retail</a> </li>
+                          <li> <a [routerLink]="['/transaksi/grosir']">Grosir</a> </li>
+                        </ul>
+                    </li>
+                    <li>
+                      <a (click)="logout()" aria-expanded="false"><i class="fa fa-power-off fa-fw"></i> <span class="hide-menu"> Logout </span></a>
                     </li>
                   </ul>
               </nav>
@@ -112,5 +130,39 @@
           </footer>
       </div>
       <!-- ===== Page-Content-End ===== -->
-  </div>
+    </div>
+    <div id="wrapper" class="login-register" *ngIf="loginstatus == null">
+      <div class="login-box">
+        <div class="white-box">
+            <form class="form-horizontal form-material" id="loginform" [formGroup]="penggunaForm" (ngSubmit)="onSubmit()">
+                <h3 class="box-title m-b-20" align="center">OPTIK KUSTIN</h3>
+                <div class="form-group ">
+                    <div class="col-xs-12">
+                      <input type="text" class="form-control" placeholder="Username" [(ngModel)]="username" formControlName="username" [ngClass]="{ 'is-invalid': submitted && f.username.errors }">
+                      <div *ngIf="submitted && f.username.errors" class="fielderror">
+                          <div *ngIf="f.username.errors.required" style="color: red; font-style: italic;">Username wajib diisi!</div>
+                      </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12">
+                      <input type="password" class="form-control" placeholder="Password" [(ngModel)]="password" formControlName="password" [ngClass]="{ 'is-invalid': submitted && f.password.errors }">
+                      <div *ngIf="submitted && f.password.errors" class="fielderror">
+                          <div *ngIf="f.password.errors.required" style="color: red; font-style: italic;">Password wajib diisi!</div>
+                      </div>
+                    </div>
+                </div>
+                <div class="form-group text-center m-t-20">
+                    <div class="col-xs-12">
+                      <div *ngIf="submitted && pesan == 'salah'" class="fielderror">
+                        <div style="color: red; font-style: italic;">Username/Passwod Salah! Silahkan coba kembali.</div>
+                      </div>
+                      <button class="btn btn-success btn-lg btn-block text-uppercase waves-effect waves-light" type="submit">Log In</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
   <!-- ===== Main-Wrapper-End ===== -->
+  

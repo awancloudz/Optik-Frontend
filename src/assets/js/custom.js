@@ -11,7 +11,7 @@ $(function() {
     var set = function() {
         var width = (window.innerWidth > 0) ? window.innerWidth : this.screen.width;
         var topOffset = 60;
-        if (width < 768) {
+        if (width < 800) {
             $("body").addClass("mini-sidebar");
             $(".scroll-sidebar, .slimScrollDiv").css("overflow-x", "visible").parent().css("overflow", "visible");
             $(".sidebartoggler i").addClass("fa fa-bars");

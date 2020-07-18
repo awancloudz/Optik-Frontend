@@ -1,168 +1,78 @@
+<ngx-spinner></ngx-spinner>
+<jaspero-alerts [defaultSettings]="options"></jaspero-alerts>
 <div class="container-fluid">
-    <!-- /.row -->
+    <div id="responsive-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" *ngIf="tombol=='tambah'"><b>Tambah Data Distributor</b></h4> 
+                    <h4 class="modal-title" *ngIf="tombol=='edit'"><b>Edit Data Distributor</b></h4> 
+                </div>
+                <form [formGroup]="distributorForm" (ngSubmit)="onSubmit()">
+                <div class="modal-body">
+                        <div class="form-group">
+                            <label for="nama" class="control-label">Nama Distributor</label>
+                            <input type="text" class="form-control" [(ngModel)]="nama" name="nama" formControlName="nama" [ngClass]="{ 'is-invalid': submitted && f.nama.errors }"> 
+                            <div *ngIf="submitted && f.nama.errors" class="invalid-feedback">
+                                <div *ngIf="f.nama.errors.required" style="color: red; font-style: italic;">Nama Wajib Diisi</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="alamat" class="control-label">Alamat</label>
+                            <textarea class="form-control" [(ngModel)]="alamat" name="alamat" formControlName="alamat" [ngClass]="{ 'is-invalid': submitted && f.alamat.errors }"></textarea>
+                            <div *ngIf="submitted && f.alamat.errors" class="invalid-feedback">
+                                <div *ngIf="f.alamat.errors.required" style="color: red; font-style: italic;">Alamat Wajib Diisi</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="notelp" class="control-label">No.Telp</label>
+                            <input type="text" class="form-control" [(ngModel)]="notelp" name="notelp" formControlName="notelp" [ngClass]="{ 'is-invalid': submitted && f.notelp.errors }"> 
+                            <div *ngIf="submitted && f.notelp.errors" class="invalid-feedback">
+                                <div *ngIf="f.notelp.errors.required" style="color: red; font-style: italic;">No.Telp Wajib Diisi</div>
+                            </div>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Batal</button>
+                    <button class="btn btn-success waves-effect waves-light">Simpan</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div> 
+    <!-- /row -->
     <div class="row">
-        <div class="white-box">
-            <div class="table-responsive">
-                <table class="table product-overview" id="myTable">
+        <div class="col-lg-12">
+            <div class="white-box">
+                <h3 align="center"><b>DATA DISTRIBUTOR</b></h3>
+                <button class="btn btn-success" (click)="tambah()"><i class="fa fa-plus"></i> Tambah Distributor</button><br><br> <!-- data-toggle="modal" data-target="#responsive-modal"-->
+                <input type="text" class="form-control" placeholder="Cari Distributor.." style="width: 50%;" (keyup)="cari()" [(ngModel)]="txtcari" name="txtcari"><br>
+                <table *ngIf="items[0].id != null" class="tablesaw table-bordered table-hover table" data-tablesaw-mode="stack"> <!-- data-tablesaw-sortable data-tablesaw-sortable-switch data-tablesaw-minimap data-tablesaw-mode-switch -->
                     <thead>
                         <tr>
-                            <th>Customer</th>
-                            <th>Order ID</th>
-                            <th>Photo</th>
-                            <th>Product</th>
-                            <th>Quantity</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-sortable-default-col data-tablesaw-priority="persist">Nama</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">Alamat</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="3">No Telp</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="4">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Steave Jobs</td>
-                            <td>#85457898</td>
-                            <td> <img src="../assets/plugins/images/chair.jpg" alt="iMac" width="80"> </td>
-                            <td>Rounded Chair</td>
-                            <td>20</td>
-                            <td>10-7-2017</td>
-                            <td> <span class="label label-success font-weight-100">Paid</span> </td>
-                            <td><a href="javascript:void(0)" class="text-inverse p-r-10" data-toggle="tooltip" title="Edit"><i class="ti-marker-alt"></i></a> <a href="javascript:void(0)" class="text-inverse" title="Delete" data-toggle="tooltip"><i class="ti-trash"></i></a></td>
-                        </tr>
-                        <tr>
-                            <td>Varun Dhavan</td>
-                            <td>#95457898</td>
-                            <td> <img src="../assets/plugins/images/chair2.jpg" alt="iPhone" width="80"> </td>
-                            <td>Wooden Chair</td>
-                            <td>25</td>
-                            <td>09-7-2017</td>
-                            <td> <span class="label label-warning font-weight-100">Pending</span> </td>
-                            <td><a href="javascript:void(0)" class="text-inverse p-r-10" data-toggle="tooltip" title="Edit"><i class="ti-marker-alt"></i></a> <a href="javascript:void(0)" class="text-inverse" title="Delete" data-toggle="tooltip"><i class="ti-trash"></i></a></td>
-                        </tr>
-                        <tr>
-                            <td>Ritesh Desh</td>
-                            <td>#68457898</td>
-                            <td> <img src="../assets/plugins/images/chair3.jpg" alt="apple_watch" width="80"> </td>
-                            <td>Gray Chair</td>
-                            <td>12</td>
-                            <td>08-7-2017</td>
-                            <td> <span class="label label-success font-weight-100">Paid</span> </td>
-                            <td><a href="javascript:void(0)" class="text-inverse p-r-10" data-toggle="tooltip" title="Edit"><i class="ti-marker-alt"></i></a> <a href="javascript:void(0)" class="text-inverse" title="Delete" data-toggle="tooltip"><i class="ti-trash"></i></a></td>
-                        </tr>
-                        <tr>
-                            <td>Hrithik</td>
-                            <td>#45457898</td>
-                            <td> <img src="../assets/plugins/images/chair4.jpg" alt="mac_mouse" width="80"> </td>
-                            <td>Pure Wooden chair</td>
-                            <td>18</td>
-                            <td>02-7-2017</td>
-                            <td> <span class="label label-danger font-weight-100">Failed</span> </td>
-                            <td><a href="javascript:void(0)" class="text-inverse p-r-10" data-toggle="tooltip" title="Edit"><i class="ti-marker-alt"></i></a> <a href="javascript:void(0)" class="text-inverse" title="Delete" data-toggle="tooltip"><i class="ti-trash"></i></a></td>
-                        </tr>
-                        <tr>
-                            <td>Genelia Jobs</td>
-                            <td>#65257898</td>
-                            <td> <img src="../assets/plugins/images/chair.jpg" alt="iMac" width="80"> </td>
-                            <td>Globe Rounded Chair</td>
-                            <td>25</td>
-                            <td>08-7-2017</td>
-                            <td> <span class="label label-success font-weight-100">Paid</span> </td>
-                            <td><a href="javascript:void(0)" class="text-inverse p-r-10" data-toggle="tooltip" title="Edit"><i class="ti-marker-alt"></i></a> <a href="javascript:void(0)" class="text-inverse" title="Delete" data-toggle="tooltip"><i class="ti-trash"></i></a></td>
-                        </tr>
-                        <tr>
-                            <td>Sonu Nigam</td>
-                            <td>#15457898</td>
-                            <td> <img src="../assets/plugins/images/chair2.jpg" alt="iPhone" width="80"> </td>
-                            <td>Gold Wooden Chair</td>
-                            <td>15</td>
-                            <td>06-7-2017</td>
-                            <td> <span class="label label-warning font-weight-100">Pending</span> </td>
-                            <td><a href="javascript:void(0)" class="text-inverse p-r-10" data-toggle="tooltip" title="Edit"><i class="ti-marker-alt"></i></a> <a href="javascript:void(0)" class="text-inverse" title="Delete" data-toggle="tooltip"><i class="ti-trash"></i></a></td>
-                        </tr>
-                        <tr>
-                            <td>Pawan Trivedi</td>
-                            <td>#56457898</td>
-                            <td> <img src="../assets/plugins/images/chair3.jpg" alt="apple_watch" width="80"> </td>
-                            <td>Still Gray Chair</td>
-                            <td>11</td>
-                            <td>05-7-2017</td>
-                            <td> <span class="label label-success font-weight-100">Paid</span> </td>
-                            <td><a href="javascript:void(0)" class="text-inverse p-r-10" data-toggle="tooltip" title="Edit"><i class="ti-marker-alt"></i></a> <a href="javascript:void(0)" class="text-inverse" title="Delete" data-toggle="tooltip"><i class="ti-trash"></i></a></td>
-                        </tr>
-                        <tr>
-                            <td>Ranbir kapoor</td>
-                            <td>#35457898</td>
-                            <td> <img src="../assets/plugins/images/chair4.jpg" alt="mac_mouse" width="80"> </td>
-                            <td>Comfirtable chair</td>
-                            <td>28</td>
-                            <td>01-7-2017</td>
-                            <td> <span class="label label-danger font-weight-100">Failed</span> </td>
-                            <td><a href="javascript:void(0)" class="text-inverse p-r-10" data-toggle="tooltip" title="Edit"><i class="ti-marker-alt"></i></a> <a href="javascript:void(0)" class="text-inverse" title="Delete" data-toggle="tooltip"><i class="ti-trash"></i></a></td>
+                        <tr *ngFor="let item of items">
+                            <td (click)="edit(item)"><a>{{ item.nama }}</a></td>
+                            <td>{{ item.alamat }}</td>
+                            <td>{{ item.notelp }}</td>
+                            <td class="text-nowrap">
+                                <a data-toggle="tooltip" data-original-title="Edit" (click)="edit(item)"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
+                                <a data-toggle="tooltip" data-original-title="Hapus" (click)="hapus(item)"> <i class="fa fa-close text-danger"></i> </a>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
+                <div *ngIf="items[0].id == null"><b>[ TIDAK ADA DATA DISTRIBUTOR! ]</b></div>
             </div>
         </div>
     </div>
-    <!--row -->
-    <!-- ===== Right-Sidebar ===== -->
-    <div class="right-sidebar">
-        <div class="slimscrollright">
-            <div class="rpanel-title"> Service Panel <span><i class="icon-close right-side-toggler"></i></span> </div>
-            <div class="r-panel-body">
-                <ul class="hidden-xs">
-                    <li><b>Layout Options</b></li>
-                    <li>
-                        <div class="checkbox checkbox-danger">
-                            <input id="headcheck" type="checkbox" class="fxhdr">
-                            <label for="headcheck"> Fix Header </label>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="checkbox checkbox-warning">
-                            <input id="sidecheck" type="checkbox" class="fxsdr">
-                            <label for="sidecheck"> Fix Sidebar </label>
-                        </div>
-                    </li>
-                </ul>
-                <ul id="themecolors" class="m-t-20">
-                    <li><b>With Light sidebar</b></li>
-                    <li><a href="javascript:void(0)" data-theme="default" class="default-theme working">1</a></li>
-                    <li><a href="javascript:void(0)" data-theme="green" class="green-theme">2</a></li>
-                    <li><a href="javascript:void(0)" data-theme="yellow" class="yellow-theme">3</a></li>
-                    <li><a href="javascript:void(0)" data-theme="red" class="red-theme">4</a></li>
-                    <li><a href="javascript:void(0)" data-theme="purple" class="purple-theme">5</a></li>
-                    <li><a href="javascript:void(0)" data-theme="black" class="black-theme">6</a></li>
-                    <li class="db"><b>With Dark sidebar</b></li>
-                    <li><a href="javascript:void(0)" data-theme="default-dark" class="default-dark-theme">7</a></li>
-                    <li><a href="javascript:void(0)" data-theme="green-dark" class="green-dark-theme">8</a></li>
-                    <li><a href="javascript:void(0)" data-theme="yellow-dark" class="yellow-dark-theme">9</a></li>
-                    <li><a href="javascript:void(0)" data-theme="red-dark" class="red-dark-theme">10</a></li>
-                    <li><a href="javascript:void(0)" data-theme="purple-dark" class="purple-dark-theme">11</a></li>
-                    <li><a href="javascript:void(0)" data-theme="black-dark" class="black-dark-theme">12</a></li>
-                </ul>
-                <ul class="m-t-20 chatonline">
-                    <li><b>Chat option</b></li>
-                    <li>
-                        <a href="javascript:void(0)"><img src="../assets/plugins/images/users/1.jpg" alt="user-img" class="img-circle"> <span>Varun Dhavan <small class="text-success">online</small></span></a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0)"><img src="../assets/plugins/images/users/2.jpg" alt="user-img" class="img-circle"> <span>Genelia Deshmukh <small class="text-warning">Away</small></span></a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0)"><img src="../assets/plugins/images/users/3.jpg" alt="user-img" class="img-circle"> <span>Ritesh Deshmukh <small class="text-danger">Busy</small></span></a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0)"><img src="../assets/plugins/images/users/4.jpg" alt="user-img" class="img-circle"> <span>Arijit Sinh <small class="text-muted">Offline</small></span></a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0)"><img src="../assets/plugins/images/users/5.jpg" alt="user-img" class="img-circle"> <span>Govinda Star <small class="text-success">online</small></span></a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0)"><img src="../assets/plugins/images/users/6.jpg" alt="user-img" class="img-circle"> <span>John Abraham<small class="text-success">online</small></span></a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <!-- ===== Right-Sidebar-End ===== -->
+    <!-- /.row -->
 </div>
 <!-- /.container-fluid -->

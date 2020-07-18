@@ -1,0 +1,203 @@
+<ngx-spinner></ngx-spinner>
+<jaspero-alerts [defaultSettings]="options"></jaspero-alerts>
+<div class="container-fluid">
+    <div id="responsive-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" *ngIf="tombol=='tambah'"><b>Tambah Data Produk Pusat</b></h4> 
+                    <h4 class="modal-title" *ngIf="tombol=='edit'"><b>Edit Data Produk Pusat</b></h4>
+                </div>
+                <form [formGroup]="stokpusatForm" (ngSubmit)="onSubmit()">
+                <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12" align="center">
+                                <input type="file" (change)="fileProgress($event)" style="display: none" #fileInput [(ngModel)]="foto" formControlName="foto">
+                                <div *ngIf="previewUrl">
+                                    <img [src]="previewUrl" width="150" (click)="fileInput.click()">   
+                                </div>
+                                <div *ngIf="!previewUrl">
+                                    <img src="../../assets/img/box-flat.png" width="150" (click)="fileInput.click()">
+                                </div>
+                                <div *ngIf="fileUploadProgress">
+                                    Upload progress: {{ fileUploadProgress }}
+                                </div>
+                                Upload Foto Produk
+                            </div>
+                        </div><br>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="kodeproduk" class="control-label">Kode Produk</label>
+                                    <input type="text" class="form-control" [(ngModel)]="kodeproduk" name="kodeproduk" formControlName="kodeproduk" [ngClass]="{ 'is-invalid': submitted && f.kodeproduk.errors }"> 
+                                    <div *ngIf="submitted && f.kodeproduk.errors" class="invalid-feedback">
+                                        <div *ngIf="f.kodeproduk.errors.required" style="color: red; font-style: italic;">Kode Wajib Diisi</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="hargadistributor" class="control-label">Harga Beli</label>
+                                    <input type="text" class="form-control" [(ngModel)]="hargadistributor" name="hargadistributor" formControlName="hargadistributor" [ngClass]="{ 'is-invalid': submitted && f.hargadistributor.errors }"> 
+                                    <div *ngIf="submitted && f.hargadistributor.errors" class="invalid-feedback">
+                                        <div *ngIf="f.hargadistributor.errors.required" style="color: red; font-style: italic;">Harga Beli Wajib Diisi</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="namaproduk" class="control-label">Nama/Seri Produk</label>
+                                    <input type="text" class="form-control" [(ngModel)]="namaproduk" name="namaproduk" formControlName="namaproduk" [ngClass]="{ 'is-invalid': submitted && f.namaproduk.errors }"> 
+                                    <div *ngIf="submitted && f.namaproduk.errors" class="invalid-feedback">
+                                        <div *ngIf="f.namaproduk.errors.required" style="color: red; font-style: italic;">Nama Wajib Diisi</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="hargagrosir" class="control-label">Harga Grosir</label>
+                                    <input type="text" class="form-control" [(ngModel)]="hargagrosir" name="hargagrosir" formControlName="hargagrosir" [ngClass]="{ 'is-invalid': submitted && f.hargagrosir.errors }"> 
+                                    <div *ngIf="submitted && f.hargagrosir.errors" class="invalid-feedback">
+                                        <div *ngIf="f.hargagrosir.errors.required" style="color: red; font-style: italic;">Harga Grosir Wajib Diisi</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="seriproduk" class="control-label">Spesifikasi Produk</label>
+                                    <input type="text" class="form-control" [(ngModel)]="seriproduk" name="seriproduk" formControlName="seriproduk"> 
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="hargajual" class="control-label">Harga Jual</label>
+                                    <input type="text" class="form-control" [(ngModel)]="hargajual" name="hargajual" formControlName="hargajual" [ngClass]="{ 'is-invalid': submitted && f.hargajual.errors }"> 
+                                    <div *ngIf="submitted && f.hargajual.errors" class="invalid-feedback">
+                                        <div *ngIf="f.hargajual.errors.required" style="color: red; font-style: italic;">Harga Jual Wajib Diisi</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="id_kategoriproduk" class="control-label">Kategori</label>
+                                    <select class="form-control" [(ngModel)]="id_kategoriproduk" name="id_kategoriproduk" formControlName="id_kategoriproduk" [ngClass]="{ 'is-invalid': submitted && f.id_kategoriproduk.errors }" (change)="carikategoriform()">
+                                        <option *ngFor="let cat of kategori" value="{{ cat.id }}">{{ cat.nama }}</option>
+                                    </select>
+                                    <div *ngIf="submitted && f.id_kategoriproduk.errors" class="invalid-feedback">
+                                        <div *ngIf="f.id_kategoriproduk.errors.required" style="color: red; font-style: italic;">Kategori Wajib Diisi</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="diskon" class="control-label">Diskon (%)</label>
+                                    <input type="text" class="form-control" [(ngModel)]="diskon" name="diskon" formControlName="diskon"> 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="id_merk" class="control-label">Merk/Brand</label>
+                                    <select class="form-control" [(ngModel)]="id_merk" name="id_merk" formControlName="id_merk" [ngClass]="{ 'is-invalid': submitted && f.id_merk.errors }">
+                                        <option *ngFor="let mk of merk" value="{{ mk.id }}">{{ mk.nama }}</option>
+                                    </select>
+                                    <div *ngIf="submitted && f.id_merk.errors" class="invalid-feedback">
+                                        <div *ngIf="f.id_merk.errors.required" style="color: red; font-style: italic;">Merk/Brand Wajib Diisi</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="stok" class="control-label">Stok</label>
+                                    <input type="text" class="form-control" [(ngModel)]="stok" name="stok" formControlName="stok" [ngClass]="{ 'is-invalid': submitted && f.stok.errors }"> 
+                                    <div *ngIf="submitted && f.stok.errors" class="invalid-feedback">
+                                        <div *ngIf="f.stok.errors.required" style="color: red; font-style: italic;">Stok Wajib Diisi</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Batal</button>
+                    <button class="btn btn-success waves-effect waves-light">Simpan</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div> 
+    <!-- /row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="white-box">
+                <h3 align="center" style="text-transform: uppercase;"><b>DATA STOK PRODUK</b><b *ngIf="items[0].id != null"> - {{ items[0].kategoriproduk.nama }}</b></h3>
+                <button class="btn btn-success" (click)="tambah()"><i class="fa fa-plus"></i> Tambah Produk</button><br><br>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Cari Produk.." (keyup)="cari()" [(ngModel)]="txtcari" name="txtcari">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <select class="form-control" [(ngModel)]="pilihkategori" name="pilihkategori" (change)="carikategori()">
+                                <option value="0">Semua Kategori</option>
+                                <option *ngFor="let cat of kategori" value="{{ cat.id }}">{{ cat.nama }}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <select class="form-control" [(ngModel)]="pilihmerk" name="pilihmerk" (change)="carimerk()">
+                                <option value="0">- Pilih Merk/Brand -</option>
+                                <option *ngFor="let mk of merk" value="{{ mk.id }}">{{ mk.nama }}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <table class="tablesaw table-bordered table-hover table" data-tablesaw-mode="stack" id="mytable" *ngIf="items[0].id != null">
+                    <thead>
+                        <tr>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="1"></th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-sortable-default-col data-tablesaw-priority="persist">Kode</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">Nama/Seri</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="3">Merk</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="4">Harga Beli</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="5">Harga Grosir</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="6">Harga Jual</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="7">Stok</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="8">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of items">
+                            <td><img src="http://localhost:8000/fotoupload/{{ item.foto }}" width="80"></td>
+                            <td (click)="edit(item)"><a>{{ item.kodeproduk }}</a></td>
+                            <td>{{ item.namaproduk }} {{ item.seriproduk }}</td>
+                            <td>{{ item.merk.nama }}</td>
+                            <td>{{ item.hargadistributor | currency:"IDR":"Rp. "}}</td>
+                            <td>{{ item.hargagrosir | currency:"IDR":"Rp. "}}</td>
+                            <td>{{ item.hargajual | currency:"IDR":"Rp. "}}</td>
+                            <td>{{ item.stok }}</td>
+                            <td class="text-nowrap">
+                                <a data-toggle="tooltip" data-original-title="Edit" (click)="edit(item)"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
+                                <a data-toggle="tooltip" data-original-title="Hapus" (click)="hapus(item)"> <i class="fa fa-close text-danger m-r-10"></i> </a>
+                                <a data-toggle="tooltip" data-original-title="Duplikat" (click)="duplikat(item)"> <i class="fa fa-copy text-success"></i> </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div *ngIf="items[0].id == null"><b>[ TIDAK ADA DATA PRODUK! ]</b></div>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.container-fluid -->

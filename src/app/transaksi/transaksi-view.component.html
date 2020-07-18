@@ -1,0 +1,80 @@
+<ngx-spinner></ngx-spinner>
+<jaspero-alerts [defaultSettings]="options"></jaspero-alerts>
+<div class="container-fluid">
+    <!-- /row -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="white-box" *ngFor="let item of items">
+                <div class="row">
+                    <div class="col-md-6">
+                        <a data-toggle="tooltip" data-original-title="Cetak" (click)="cetak(item)" class="btn btn-success"><i class="fa fa-print"></i> Cetak</a>&nbsp;
+                        <a *ngIf="item.status == 'belum' && item.jenistransaksi =='pesan'" data-toggle="tooltip" data-original-title="Lunas" (click)="lunas(item)" class="btn btn-primary"> <i class="fa fa-check"></i> Lunasi</a>
+                    </div>
+                </div>
+                <h3 align="center" style="text-transform: uppercase;"><b>DETAIL TRANSAKSI {{ item.jenistransaksi }}</b></h3>
+                <div class="row">
+                    <div class="col-md-2"><b>Kode</b></div><div class="col-md-4">: {{ item.kodetransaksi }}</div>
+                    <div class="col-md-2"><b>Transaksi</b></div><div class="col-md-4" style="text-transform: uppercase;">: {{ item.jenistransaksi }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2"><b>Tanggal</b></div><div class="col-md-4">: {{ item.tanggaltransaksi | date: 'dd-M-yyyy' }}</div>
+                    <div class="col-md-2"><b>Pembayaran</b></div><div class="col-md-4" style="text-transform: uppercase;">: {{ item.status }}</div>
+                </div>
+                <div class="row" *ngIf="item.jenistransaksi == 'pesan'">
+                    <div class="col-md-2"><b>Tanggal Selesai</b></div><div class="col-md-4">: {{ item.tanggalselesai | date: 'dd-M-yyyy'}}</div>
+                    <div class="col-md-2"><b>Jam Selesai</b></div><div class="col-md-4">: {{ item.jamselesai }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2" *ngIf="item.jenistransaksi == 'pembelian'"><b>Distributor</b></div><div class="col-md-2" *ngIf="item.jenistransaksi == 'pesan' || item.jenistransaksi == 'grosir'"><b>Customer</b></div>
+                    <div class="col-md-4" *ngIf="item.jenistransaksi == 'pembelian' || item.jenistransaksi == 'pesan' || item.jenistransaksi == 'grosir'">: {{ item.customer.nama }}</div>
+                    <div class="col-md-2" *ngIf="item.jenistransaksi == 'kirimcabang'"><b>Ke Cabang</b></div>
+                    <div class="col-md-4" *ngIf="item.jenistransaksi == 'kirimcabang'"><b *ngFor="let kirim of item.pengiriman">: {{ kirim.profile.nama }}</b></div>
+                    <div class="col-md-2" *ngIf="item.jenistransaksi == 'pembelian' || item.jenistransaksi == 'kirimcabang'"><b>Admin</b></div>
+                    <div class="col-md-2" *ngIf="item.jenistransaksi == 'retail' || item.jenistransaksi == 'pesan' || item.jenistransaksi == 'grosir'"><b>Sales</b></div>
+                    <div class="col-md-4">: {{ item.karyawan.nama }}</div>
+                </div>
+                <br>
+                <table class="tablesaw table-bordered table-hover table" data-tablesaw-mode="stack" id="mytable" *ngIf="items[0].id != null">
+                    <thead>
+                        <tr>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-sortable-default-col data-tablesaw-priority="persist" style="text-align: center;">Nama/Seri</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2" style="text-align: center;">Merk</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="3" style="text-align: center;">Harga</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="4" style="text-align: center;">Jumlah</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="5" style="text-align: center;">Diskon</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="6" style="text-align: center;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let view of item.detailtransaksi">
+                            <td>{{ view.produk.namaproduk }}</td>
+                            <td>{{ view.produk.merk.nama }}</td>
+                            <td style="text-align: right;">{{ view.harga | currency:"IDR":"Rp. "}}</td>
+                            <td style="text-align: center;">{{ view.jumlah }}</td>
+                            <td style="text-align: center;">{{ view.diskon | currency:"IDR":"Rp. "}}</td>
+                            <td style="text-align: right;">{{ view.total | currency:"IDR":"Rp. "}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" style="text-align: right;"><b>Total Belanja</b></td><td style="text-align: right;"><b>{{ item.totalbelanja | currency:"IDR":"Rp. "}}</b></td>
+                        </tr>
+                        <tr >
+                            <td colspan="5" style="text-align: right;"><b>Total Diskon</b></td><td style="text-align: right;"><b>{{ item.totaldiskon | currency:"IDR":"Rp. "}}</b></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" style="text-align: right;"><b>Sub Total</b></td><td style="text-align: right;"><b>{{ item.subtotal | currency:"IDR":"Rp. "}}</b></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" style="text-align: right;"><b>Bayar</b></td><td style="text-align: right;"><b>{{ item.bayar | currency:"IDR":"Rp. "}}</b></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" style="text-align: right;"><b>Kembali</b></td><td style="text-align: right;"><b>{{ item.kembali | currency:"IDR":"Rp. "}}</b></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" style="text-align: right;"><b>Sisa</b></td><td style="text-align: right;"><b>{{ item.sisa | currency:"IDR":"Rp. "}}</b></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

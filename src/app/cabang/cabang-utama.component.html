@@ -1,0 +1,44 @@
+<ngx-spinner></ngx-spinner>
+<jaspero-alerts [defaultSettings]="options"></jaspero-alerts>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="white-box">
+            <h3 align="center"><b>PROFILE TOKO</b></h3>
+            <form [formGroup]="cabangForm" (ngSubmit)="onSubmit()">
+                <div class="form-group">
+                    <label for="nama" class="control-label">Nama Toko</label>
+                    <input type="text" class="form-control" [(ngModel)]="nama" name="nama" formControlName="nama" [ngClass]="{ 'is-invalid': submitted && f.nama.errors }"> 
+                    <div *ngIf="submitted && f.nama.errors" class="invalid-feedback">
+                        <div *ngIf="f.nama.errors.required" style="color: red; font-style: italic;">Nama Wajib Diisi</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="alamat" class="control-label">Alamat</label>
+                    <textarea class="form-control" [(ngModel)]="alamat" name="alamat" formControlName="alamat" [ngClass]="{ 'is-invalid': submitted && f.alamat.errors }"></textarea>
+                    <div *ngIf="submitted && f.alamat.errors" class="invalid-feedback">
+                        <div *ngIf="f.alamat.errors.required" style="color: red; font-style: italic;">Alamat Wajib Diisi</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="kota" class="control-label">Kota</label>
+                    <input type="text" class="form-control" [(ngModel)]="kota" name="kota" formControlName="kota" [ngClass]="{ 'is-invalid': submitted && f.kota.errors }"> 
+                    <div *ngIf="submitted && f.kota.errors" class="invalid-feedback">
+                        <div *ngIf="f.kota.errors.required" style="color: red; font-style: italic;">Kota Wajib Diisi</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="notelp" class="control-label">No.Telp</label>
+                    <input type="text" class="form-control" [(ngModel)]="notelp" name="notelp" formControlName="notelp" [ngClass]="{ 'is-invalid': submitted && f.notelp.errors }"> 
+                    <div *ngIf="submitted && f.notelp.errors" class="invalid-feedback">
+                        <div *ngIf="f.notelp.errors.required" style="color: red; font-style: italic;">No.Telp Wajib Diisi</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-success waves-effect waves-light">Simpan</button>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+</div>

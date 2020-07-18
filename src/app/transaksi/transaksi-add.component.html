@@ -1,0 +1,190 @@
+<ngx-spinner></ngx-spinner>
+<jaspero-alerts [defaultSettings]="options"></jaspero-alerts>
+<div class="container-fluid">
+    <!-- /row -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="white-box">
+                <h3 align="center" style="text-transform: uppercase;"><b>TAMBAH TRANSAKSI {{ jenis }}</b></h3>
+                <form [formGroup]="transaksiForm" (ngSubmit)="onSubmit()">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="id_karyawan" class="control-label" *ngIf="jenis == 'pembelian' || jenis == 'kirimcabang'">Admin</label>
+                            <label for="id_karyawan" class="control-label" *ngIf="jenis == 'pesan' || jenis == 'retail' || jenis =='grosir'">Sales</label>
+                            <select class="form-control" [(ngModel)]="id_karyawan" name="id_karyawan" formControlName="id_karyawan" [ngClass]="{ 'is-invalid': submitted && f.id_karyawan.errors }" (change)="tampilsales()">
+                                <option value="0" *ngIf="jenis == 'pembelian' || jenis == 'kirimcabang'">- Pilih Admin -</option>
+                                <option value="0" *ngIf="jenis == 'pesan' || jenis == 'retail' || jenis =='grosir'">- Pilih Sales -</option>
+                                <option *ngFor="let emp of karyawan" value="{{ emp.id }}">{{ emp.nama }}</option>
+                            </select>
+                            <div *ngIf="submitted && f.id_karyawan.errors" class="invalid-feedback">
+                                <div *ngIf="f.id_karyawan.errors.required" style="color: red; font-style: italic;">
+                                    Wajib diisi!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6" *ngIf="jenis != 'kirimcabang'">
+                        <div class="form-group">
+                            <label for="status" class="control-label">Status Bayar</label>
+                            <select class="form-control" [(ngModel)]="status" name="status" formControlName="status" [ngClass]="{ 'is-invalid': submitted && f.status.errors }">
+                                <option value="lunas">Lunas</option>
+                                <option value="belum">Belum</option>
+                            </select>
+                            <div *ngIf="submitted && f.status.errors" class="invalid-feedback">
+                                <div *ngIf="f.status.errors.required" style="color: red; font-style: italic;">
+                                    Wajib diisi!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="jenis == 'pesan' || jenis =='grosir' || jenis == 'pembelian'">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="id_customer" class="control-label" *ngIf="jenis == 'pembelian'">Distributor</label>
+                            <label for="id_customer" class="control-label" *ngIf="jenis == 'pesan' || jenis =='grosir'">Customer</label>
+                            <select class="form-control" [(ngModel)]="id_customer" name="id_customer" formControlName="id_customer" [ngClass]="{ 'is-invalid': submitted && f.id_customer.errors }">
+                                <option *ngFor="let cust of customer" value="{{ cust.id }}">{{ cust.nama }}</option>
+                            </select>
+                            <div *ngIf="submitted && f.id_customer.errors" class="invalid-feedback">
+                                <div *ngIf="f.id_customer.errors.required" style="color: red; font-style: italic;">
+                                    Wajib diisi!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <br>
+                        <a class="btn btn-primary waves-effect waves-light" *ngIf="jenis == 'pembelian' && level == 'admin'"><i class="fa fa-plus"></i> Tambah Distributor</a>
+                        <a class="btn btn-warning waves-effect waves-light" *ngIf="jenis == 'pesan' || jenis =='grosir'"><i class="fa fa-eye"></i> Resep</a>&nbsp;
+                        <a class="btn btn-primary waves-effect waves-light" *ngIf="jenis == 'pesan' || jenis =='grosir'"><i class="fa fa-plus"></i> Tambah Customer</a>
+                    </div>
+                </div>
+                <div class="row" *ngIf="jenis == 'kirimcabang'">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="id_cabang" class="control-label">Toko Cabang</label>
+                            <select class="form-control" [(ngModel)]="id_cabang" name="id_cabang" formControlName="id_cabang" [ngClass]="{ 'is-invalid': submitted && f.id_cabang.errors }">
+                                <option *ngFor="let cab of cabang" value="{{ cab.id }}">{{ cab.nama }}</option>
+                            </select>
+                            <div *ngIf="submitted && f.id_cabang.errors" class="invalid-feedback">
+                                <div *ngIf="f.id_cabang.errors.required" style="color: red; font-style: italic;">
+                                    Wajib diisi!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <br>
+                        <a class="btn btn-primary waves-effect waves-light" *ngIf="jenis == 'kirimcabang' && level == 'admin'"><i class="fa fa-plus"></i> Tambah Cabang</a>
+                    </div>
+                </div>
+                </form>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="tanggaltransaksi" class="control-label">Tanggal Transaksi</label>
+                            <input type="date" class="form-control" [(ngModel)]="tanggaltransaksi" name="tanggaltransaksi" id="tanggaltransaksi">
+                        </div>
+                    </div>
+                    <div class="col-md-2" *ngIf="jenis == 'pesan'">
+                        <div class="form-group">
+                            <label for="hari" class="control-label">H+</label>
+                            <input type="text" class="form-control" [(ngModel)]="hari" name="hari" (keyup)="edithari()">
+                        </div>
+                    </div>
+                    <div class="col-md-4" *ngIf="jenis == 'pesan'">
+                        <div class="form-group">
+                            <label for="tanggalselesai" class="control-label">Tanggal Selesai</label>
+                            <input type="date" class="form-control" [(ngModel)]="tanggalselesai" name="tanggalselesai">
+                        </div>
+                    </div>
+                    <div class="col-md-2" *ngIf="jenis == 'pesan'">
+                        <div class="form-group">
+                            <label for="jamselesai" class="control-label">Jam</label>
+                            <input type="time" class="form-control" [(ngModel)]="jamselesai" name="jamselesai">
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="white-box">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Cari Kode Produk.." (keyup)="caribarcode()" [(ngModel)]="kodeproduk" name="kodeproduk">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-success waves-effect waves-light">Tampil Semua Produk</button>
+                    </div>
+                </div>
+                <h3 align="center" *ngIf="keranjang[0].id == null"><b>[ DAFTAR PRODUK MASIH KOSONG! ]</b></h3>
+                <h3 align="center" *ngIf="keranjang[0].id != null"><b>DAFTAR PRODUK</b></h3>
+                <table class="tablesaw table-bordered table-hover table" data-tablesaw-mode="stack" id="mytable" *ngIf="keranjang[0].id != null">
+                    <thead>
+                        <tr>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-sortable-default-col data-tablesaw-priority="persist" style="text-align: center;">Nama/Seri</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2" style="text-align: center;">Merk</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="3" style="text-align: center;">Harga</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="4" style="text-align: center;">Jumlah</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="5" style="text-align: center;">Diskon</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="6" style="text-align: center;">Total</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="7" style="text-align: center;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let cart of keranjang; let i = index;">
+                            <td>{{ cart.produk.namaproduk }}</td>
+                            <td>{{ cart.produk.merk.nama }}</td>
+                            <td style="text-align: right;">{{ cart.harga | currency:"IDR":"Rp. "}}
+                                <p *ngIf="cart.diskon > 0" style="color: blue;"><i>(Disc {{ cart.produk.diskon }}%)</i></p>
+                            </td>
+                            <td style="text-align: center;">
+                                <a (click)="decrement(i)"><i class="fa fa-minus"></i></a>&nbsp;&nbsp;
+                                {{ cart.jumlah }}&nbsp;&nbsp;
+                                <a (click)="increment(i)"><i class="fa fa-plus"></i></a>
+                            </td>
+                            <td style="text-align: center;">
+                                <!-- {{ cart.diskon | currency:"IDR":"Rp. "}} -->
+                            <input type="text" id="diskon_{{ i }}" (change)="editdiskon(i)" value="{{ cart.diskon }}"> 
+                            </td>
+                            <td style="text-align: right;">{{ cart.total | currency:"IDR":"Rp. "}}</td>
+                            <td style="text-align: center;">
+                                <a data-toggle="tooltip" data-original-title="Hapus" (click)="hapus(cart)"> <i class="fa fa-close text-danger"></i> </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" style="text-align: right;"><b>Total Belanja</b></td><td style="text-align: right;"><b>{{ totalbelanja | currency:"IDR":"Rp. "}}</b></td>
+                        </tr>
+                        <tr >
+                            <td colspan="5" style="text-align: right;"><b>Total Diskon</b></td><td style="text-align: right;"><b>{{ totaldiskon | currency:"IDR":"Rp. "}}</b></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" style="text-align: right;"><b>Sub Total</b></td><td style="text-align: right;"><b>{{ subtotal | currency:"IDR":"Rp. "}}</b></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" style="text-align: right;"><b>Bayar / Uang Muka</b></td><td style="text-align: right;">
+                                <input type="text" class="form-control" [(ngModel)]="bayar" name="bayar" (keyup)="editbayar()">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" style="text-align: right;"><b>Kembali</b></td><td style="text-align: right;"><b>{{ kembali | currency:"IDR":"Rp. "}}</b></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" style="text-align: right;"><b>Sisa</b></td><td style="text-align: right;"><b>{{ sisa | currency:"IDR":"Rp. "}}</b></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="row" *ngIf="keranjang[0].id != null">
+                    <div class="col-md-8">
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-lg btn-success waves-effect waves-light" (click)="onSubmit()">Simpan Transaksi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

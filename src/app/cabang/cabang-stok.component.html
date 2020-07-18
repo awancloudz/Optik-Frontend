@@ -1,0 +1,108 @@
+<ngx-spinner></ngx-spinner>
+<jaspero-alerts [defaultSettings]="options"></jaspero-alerts>
+<div class="container-fluid">
+    <div id="responsive-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title"><b>Edit Data Produk Cabang</b></h4>
+                </div>
+                <form [formGroup]="stokcabangForm" (ngSubmit)="onSubmit()">
+                <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="hargajual" class="control-label">Harga Jual</label>
+                                    <input type="text" class="form-control" [(ngModel)]="hargajual" name="hargajual" formControlName="hargajual" [ngClass]="{ 'is-invalid': submitted && f.hargajual.errors }"> 
+                                    <div *ngIf="submitted && f.hargajual.errors" class="invalid-feedback">
+                                        <div *ngIf="f.hargajual.errors.required" style="color: red; font-style: italic;">Harga Jual Wajib Diisi</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="stok" class="control-label">Stok</label>
+                                    <input type="text" class="form-control" [(ngModel)]="stok" name="stok" formControlName="stok" [ngClass]="{ 'is-invalid': submitted && f.stok.errors }"> 
+                                    <div *ngIf="submitted && f.stok.errors" class="invalid-feedback">
+                                        <div *ngIf="f.stok.errors.required" style="color: red; font-style: italic;">Stok Wajib Diisi</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Batal</button>
+                    <button class="btn btn-success waves-effect waves-light">Simpan</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div> 
+    <!-- /row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="white-box">
+                <h3 align="center" style="text-transform: uppercase;"><b>DATA STOK PRODUK</b><b *ngIf="items[0].id != null"> - {{ items[0].profile.nama }}</b></h3>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Cari Produk.." (keyup)="cari()" [(ngModel)]="txtcari" name="txtcari">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <select class="form-control" [(ngModel)]="pilihkategori" name="pilihkategori" (change)="carikategori()">
+                                <option value="0">Semua Kategori</option>
+                                <option *ngFor="let cat of kategori" value="{{ cat.id }}">{{ cat.nama }}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <select class="form-control" [(ngModel)]="pilihmerk" name="pilihmerk" (change)="carimerk()">
+                                <option value="0">- Pilih Merk/Brand -</option>
+                                <option *ngFor="let mk of merk" value="{{ mk.id }}">{{ mk.nama }}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <table class="tablesaw table-bordered table-hover table" data-tablesaw-mode="stack" id="mytable" *ngIf="items[0].id != null">
+                    <thead>
+                        <tr>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="1"></th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-sortable-default-col data-tablesaw-priority="persist">Kode</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">Nama/Seri</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="3">Merk</th>
+                            <!-- <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="4">Harga Beli</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="5">Harga Grosir</th> -->
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="6">Harga Jual</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="7">Stok</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="8" *ngIf="level == 'admin'">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of items">
+                            <td><img src="http://localhost:8000/fotoupload/{{ item.foto }}" width="80"></td>
+                            <td (click)="edit(item)" *ngIf="level == 'admin'"><a>{{ item.kodeproduk }}</a></td>
+                            <td *ngIf="level == 'sales'"><a>{{ item.kodeproduk }}</a></td>
+                            <td>{{ item.namaproduk }} {{ item.seriproduk }}</td>
+                            <td>{{ item.produk.merk.nama }}</td>
+                            <!-- <td>{{ item.produk.hargadistributor | currency:"IDR":"Rp. "}}</td>
+                            <td>{{ item.produk.hargagrosir | currency:"IDR":"Rp. "}}</td> -->
+                            <td>{{ item.hargajual | currency:"IDR":"Rp. "}}</td>
+                            <td>{{ item.stok }}</td>
+                            <td class="text-nowrap" *ngIf="level == 'admin'">
+                                <a data-toggle="tooltip" data-original-title="Edit" (click)="edit(item)"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
+                                <!-- <a data-toggle="tooltip" data-original-title="Hapus" (click)="hapus(item)"> <i class="fa fa-close text-danger"></i> </a> -->
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div *ngIf="items[0].id == null"><b>[ TIDAK ADA DATA PRODUK! ]</b></div>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.container-fluid -->

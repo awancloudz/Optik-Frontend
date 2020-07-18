@@ -13,3 +13,17 @@ export class HomeComponent implements OnInit {
   }
 
 }
+
+@Component({
+  selector: 'app-home',
+  templateUrl: './home-notfound.component.html',
+  styleUrls: ['./home.component.css']
+})
+export class HomeNotfoundComponent implements OnInit {
+
+  constructor() { }
+
+  ngOnInit() {
+  }
+
+}
